@@ -1,0 +1,16 @@
+    public static void addProduct(String ProductName, String WarehouseId, String SupplierId, String CategoryName) {
+        String query = "INSERT INTO Product (ProductId, ProductName, WarehouseId, SupplierId, CategoryName) VALUES (?, ?, ?, ?, ?)";
+            try (Connection connection = ConnectionHandler.getConnection()) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, Product.generateId());
+            preparedStatement.setString(2, ProductName);
+            preparedStatement.setString(3, WarehouseId);
+            preparedStatement.setString(4, SupplierId);
+            preparedStatement.setString(5, CategoryName);
+            preparedStatement.executeUpdate();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+    }

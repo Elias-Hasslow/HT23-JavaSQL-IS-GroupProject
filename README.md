@@ -1,0 +1,1 @@
+Java Maven project from school using SQL and Java

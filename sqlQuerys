@@ -1,0 +1,97 @@
+SELECT p.*
+FROM Product p
+WHERE p.ProductId = inputProductId
+
+SELECT p.*
+FROM Product p
+WHERE p.CategoryName = inputCategoryName (inputCategoryName hämtar man från giun)
+
+
+SELECT ProductName, COUNT(ProductId) AS CurrentCapacity
+FROM Product
+GROUP BY ProductName
+HAVING ProductName = InputProductName
+
+SELECT ProductName, COUNT(ProductName) AS Amount
+FROM Product
+WHERE WarehouseId = InputWarehouseId
+GROUP BY ProductName
+
+SELECT DISTINCT P.ProductName
+FROM Product p
+JOIN Supplier s ON p.SupplierId = s.SupplierId
+WHERE s.SupplierId = inputSupplierId
+
+SELECT p.*
+FROM Product p
+WHERE WarehouseId = InputWarehouseId
+
+SELECT s.*
+FROM Supplier s
+WHERE s.SupplierId = InputSupplierId (InputSupplierId hämtar man värde från giun)
+
+SELECT *
+FROM Supplier
+
+select *
+from Warehouse
+
+UPDATE Product
+SET InputUpdateColumn = InputNewValue
+WHERE ProductName = InputUpdateProduct
+
+SELECT COUNT(DISTINCT ProductName) AS AmountOfProducts
+FROM Product
+
+SELECT Min(ProductID), ProductName, COUNT(*) AS ProductCount
+FROM Product
+GROUP BY ProductName
+HAVING COUNT(*) < 50
+
+SELECT table_name = t.name
+FROM sys.tables t
+INNER JOIN sys.schemas s ON t.schema_id = s.schema_id
+
+SELECT i.name AS primary_key_name 
+FROM sys.indexes i 
+WHERE i.is_primary_key = 1
+
+SELECT name AS foreign_key_name
+FROM sys.foreign_keys
+
+SELECT s.supplierID, s.supplierName, w.WarehouseName
+FROM Supplier AS s
+JOIN Product AS p ON s.supplierId = p.SupplierId
+JOIN Warehouse AS w ON p.WarehouseId = w.WarehouseId
+WHERE W.WarehouseName = 'input warehouseName'
+
+SELECT P.CategoryName, SUM(1) AS TotalProductsInStock
+FROM Product AS P
+WHERE P.CategoryName = 'input CatagoryName'
+GROUP BY CategoryName
+
+SELECT TOP 1
+    t.name AS table_name,
+    SUM(p.rows) AS row_count
+FROM sys.tables t
+INNER JOIN sys.partitions p ON t.object_id = p.object_id
+WHERE t.type_desc = 'USER_TABLE'
+GROUP BY t.name
+ORDER BY row_count DESC
+
+SELECT p.ProductName, SUM(1) AS TotalStock
+FROM Product AS p
+JOIN ProductCategory AS pc ON pc.CategoryName = p.CategoryName
+JOIN Warehouse AS w ON p.WarehouseId = w.WarehouseId
+WHERE pc.CategoryName = 'input pc.CategoryName ' AND w.WarehouseName = 'input w.WarehouseName'
+GROUP BY p.ProductName
+
+SELECT w.WarehouseId, w.WarehouseName
+FROM Warehouse w
+WHERE NOT EXISTS (
+    SELECT p.ProductName
+    FROM Product p
+    WHERE p.WarehouseId = w.WarehouseId
+    GROUP BY p.ProductName
+    HAVING COUNT(DISTINCT p.ProductName) < (SELECT COUNT(DISTINCT ProductName) FROM Product)
+)
